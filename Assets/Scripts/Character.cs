@@ -7,6 +7,10 @@ using UnityEngine;
 [RequireComponent (typeof(Animator))]
 public class Character : MonoBehaviour
 {
+    public int damage = 1;
+    public float damageTime = 2.0f;
+    float timeSinceLastDamage;
+
     CharacterController controller;
     Animator animator;
 
@@ -19,7 +23,8 @@ public class Character : MonoBehaviour
     public GameObject handHammer;
     public GameObject hammerHitbox;
     public bool hammer;
-       
+
+    bool coroutineRunning = false;
     Vector3 moveDirection;
 
     enum ControllerType { SimpleMove, Move };
@@ -187,70 +192,32 @@ public class Character : MonoBehaviour
         animator.SetBool("IsGrounded", controller.isGrounded);
         animator.SetFloat("Speed", transform.InverseTransformDirection(controller.velocity).z);
     }
-    //OnCollision 
-    //~boh need collider
-    //~at least one needs rigidbody
-    void OnCollisionEnter(Collision collision)
-    {
-        
-        //if (collision.gameObject.tag == "Enemy")
-        //{
-        //    animator.SetTrigger("Hurt");
-        //}
-        
-    }
-    void OnCollisionStay(Collision collision) // As long as it is inside
-    {
-
-    }
-    void OnCollisionExit(Collision collision) // when it stops
-    {
-        //Debug.Log("OnCollisionExit: " + collision.transform.name);
-    }
-    //OnControllerColliderHit
-    //~behaves like stay
-    //~one GO needs a collider
-    //~needs character controller
+ 
     void OnControllerColliderHit(ControllerColliderHit hit)//same as stay
     {
         if (hit.gameObject.tag == "Enemy")
         {
-            animator.SetTrigger("Hurt");
+            if (Time.time > timeSinceLastDamage + damageTime)
+            {
+                //GameManager.instance.health--;
+                Damaged();
+                //moveDirection.y = jumpSpeed;
+                //moveDirection.z
+            }
+
         }
         if (hit.gameObject.tag == "Acid")
         {
-            animator.SetTrigger("Hurt");
+            Damaged();
             speed = 3.0f;
         }
         if (hit.gameObject.tag == "Water")
         {
             animator.SetBool("Dead", true);
+            GameManager.instance.health = 0;
         }
     }
-    //OnTriggerAAAAA
-    //~one GO needs a collider
-    //~needs isTrigger
-    private void OnTriggerEnter(Collider other)
-    {
-        //Debug.Log("OnTriggerEnter: " + other.transform.name);
-    }
-    private void OnTriggerStay(Collider other)
-    {
-        //if (other.gameObject.tag == "Acid")
-        //{
-        //    animator.SetTrigger("Hurt");
-        //    speed = 3.0f;
-        //}
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        //if (other.gameObject.tag == "Acid")
-        //{
-        //    speed = 6.0f;
-        //}
-
-    }
-
+   
     public void fire()
     {
         Debug.Log("pew pew");
@@ -286,5 +253,26 @@ public class Character : MonoBehaviour
     public void desactiveHitbox()
     {
         hammerHitbox.SetActive(false);
+    }
+    public void Damaged()
+    {
+        if (!coroutineRunning)
+        {
+            StartCoroutine("Damage");
+        }
+        else
+        {
+            StopCoroutine("Damage");
+            StartCoroutine("Damage");
+        }
+    }
+    IEnumerator Damage()
+    {
+        coroutineRunning = true;
+
+        yield return new WaitForSeconds(0.1f);
+        animator.SetTrigger("Hurt");
+        GameManager.instance.health--;
+        coroutineRunning = false;
     }
 }
