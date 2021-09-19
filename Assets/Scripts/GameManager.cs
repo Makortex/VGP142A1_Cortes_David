@@ -8,14 +8,24 @@ public class GameManager : MonoBehaviour
 {
     static GameManager _instance = null;
     CanvasManager currentCanvas;
-     
+    public bool end;
     public static GameManager instance
     {
         get { return _instance; }
         set { _instance = value; }
     }
-    public float maxHealth = 10;
+    public float _maxHealth = 10;
+    public float maxHealth
+    {
+        get { return _maxHealth; }
+        set
+        {
+            currentCanvas = FindObjectOfType<CanvasManager>();
 
+            _maxHealth = value;
+            currentCanvas.SetMaxHealthText();
+        }
+    }
     float _health;
     public float health
     {
@@ -35,6 +45,19 @@ public class GameManager : MonoBehaviour
             currentCanvas.SetHealthText();
         }
     }
+    int _score = 0;
+    public int score
+    {
+        get { return _score; }
+        set
+        {
+            currentCanvas = FindObjectOfType<CanvasManager>();
+
+            _score = value;
+            currentCanvas.SetScoreText();
+
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -52,7 +75,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     public void QuitGame()
     {
@@ -66,6 +89,8 @@ public class GameManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "SampleScene")
         {
+            Cursor.lockState = CursorLockMode.None;
+
             SceneManager.LoadScene("GameOver");
             Debug.Log("You died, press Esc key to go to Title Screen");
         }
@@ -74,11 +99,24 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         _health = 10;
+        _score = 0;
         SceneManager.LoadScene("SampleScene");
         Time.timeScale = 1;
     }
     public void ReturnToMenu()
     {
         SceneManager.LoadScene("MainMenu");
+        Cursor.lockState = CursorLockMode.None;
+
+    }
+    public void Win()
+    {
+        //if (end == true)
+        {
+            Cursor.lockState = CursorLockMode.None;
+
+            SceneManager.LoadScene("Win");
+
+        }
     }
 }

@@ -7,9 +7,17 @@ using UnityEngine;
 [RequireComponent (typeof(Animator))]
 public class Character : MonoBehaviour
 {
+    AudioSource pickupAudioSource;
+    public AudioClip pickupSFX;
+
     public int damage = 1;
     public float damageTime = 2.0f;
     float timeSinceLastDamage;
+
+    public GameObject goku;
+    //public GameObject melee;
+    private Goku gok;
+    private Melee mel;
 
     CharacterController controller;
     Animator animator;
@@ -24,6 +32,7 @@ public class Character : MonoBehaviour
     public GameObject hammerHitbox;
     public bool hammer;
 
+    public bool hasKey;
     bool coroutineRunning = false;
     Vector3 moveDirection;
 
@@ -43,9 +52,13 @@ public class Character : MonoBehaviour
     {
         try
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            //pickupAudioClip = GetComponent<AudioSource>();
+
             controller = GetComponent<CharacterController>();
             animator = GetComponent<Animator>();
-
+            gok = goku.GetComponent<Goku>();
+            //mel = melee.GetComponent<Melee>();
             controller.minMoveDistance = 0.0f;
 
             animator.applyRootMotion = false;
@@ -217,7 +230,101 @@ public class Character : MonoBehaviour
             GameManager.instance.health = 0;
         }
     }
-   
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Enemy")
+        { 
+            Damaged(); 
+        }
+        if (other.gameObject.tag == "Key")
+        {
+            if (!pickupAudioSource)
+            {
+                pickupAudioSource = gameObject.AddComponent<AudioSource>();
+                pickupAudioSource.clip = pickupSFX;
+                pickupAudioSource.loop = false;
+            }
+            pickupAudioSource.Play();
+
+            hasKey = true;
+            Destroy(other.gameObject);
+        }
+        if (other.gameObject.tag == "Medkit")
+        {
+            if (!pickupAudioSource)
+            {
+                pickupAudioSource = gameObject.AddComponent<AudioSource>();
+                pickupAudioSource.clip = pickupSFX;
+                pickupAudioSource.loop = false;
+            }
+            pickupAudioSource.Play();
+
+            GameManager.instance.health = GameManager.instance.maxHealth;
+            Destroy(other.gameObject);
+        }
+        if (other.gameObject.tag == "Coin")
+        {
+            if (!pickupAudioSource)
+            {
+                pickupAudioSource = gameObject.AddComponent<AudioSource>();
+                pickupAudioSource.clip = pickupSFX;
+                pickupAudioSource.loop = false;
+            }
+            pickupAudioSource.Play();
+
+            GameManager.instance.score++;
+            Destroy(other.gameObject);
+        }
+        if (other.gameObject.tag == "Pumpkin")
+        {
+            if (!pickupAudioSource)
+            {
+                pickupAudioSource = gameObject.AddComponent<AudioSource>();
+                pickupAudioSource.clip = pickupSFX;
+                pickupAudioSource.loop = false;
+            }
+            pickupAudioSource.Play();
+
+            GameManager.instance.maxHealth++;
+            GameManager.instance.health++;
+            Destroy(other.gameObject);
+        }
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Range")
+        {
+            gok.range = true;
+            gok.fight = true;
+        }
+        if (other.gameObject.tag == "Melee")
+        {
+            gok.melee = true;
+        }
+        if (other.gameObject.tag == "Portal")
+        {
+            if(hasKey==true)
+            {
+                GameManager.instance.Win();
+            }
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Range")
+        {
+            gok.range = false;
+            gok.fight = false;
+        }
+        if (other.gameObject.tag == "Melee")
+        {
+            gok.melee = false;
+        }
+        //if (other.gameObject.tag == "Agro")
+        //{
+        //    mel.melee = false;
+        //}
+    }
     public void fire()
     {
         Debug.Log("pew pew");
@@ -266,6 +373,7 @@ public class Character : MonoBehaviour
             StartCoroutine("Damage");
         }
     }
+    
     IEnumerator Damage()
     {
         coroutineRunning = true;

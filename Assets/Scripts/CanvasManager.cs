@@ -18,10 +18,15 @@ public class CanvasManager : MonoBehaviour
 
     [Header("Text")]
     public Text healthText;
+    public Text scoreText;
+    public Text maxHealthText;
+    public Text winText;
+    public Text loseText;
 
     [Header("Menus")]
     public GameObject controlMenu;
     public GameObject mainMenu;
+
 
     // Start is called before the first frame update
     void Start()
@@ -51,19 +56,47 @@ public class CanvasManager : MonoBehaviour
         {
             SetHealthText();
         }
+        if (scoreText)
+        {
+            SetScoreText();
+        }
+        if (maxHealthText)
+        {
+            SetMaxHealthText();
+        }
     }
     public void SetHealthText()
     {
         if (GameManager.instance)
         {
             healthText.text = GameManager.instance.health.ToString();
-            //healthBarImage.fillAmount = 0.7f;
         }
         else
         {
             SetHealthText();
         }
-
+    }
+    public void SetScoreText()
+    {
+        if (GameManager.instance)
+        {
+            scoreText.text = GameManager.instance.score.ToString();           
+        }
+        else
+        {
+            SetScoreText();
+        }
+    }
+    public void SetMaxHealthText()
+    {
+        if (GameManager.instance)
+        {
+            maxHealthText.text = GameManager.instance.maxHealth.ToString();
+        }
+        else
+        {
+            SetMaxHealthText();
+        }
     }
     // Update is called once per frame
     void Update()

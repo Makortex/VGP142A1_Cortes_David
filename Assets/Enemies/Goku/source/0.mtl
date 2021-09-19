@@ -1,0 +1,64 @@
+# Blender MTL File: 'ModelRenderLighting.blend'
+# Material Count: 5
+
+newmtl 24_Body_1_16_16
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.471650 0.750155 0.753267
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd GKN_base.tga
+map_Bump bump.png
+map_Ks GKN_S.tga
+map_d GKN_base.tga
+
+newmtl 5_EyeballLeft_1_16_16
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.712753 0.563980 0.727644
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd Eye1.png
+map_d Eye1.png
+
+newmtl 5_EyeballRight_1_16_16
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.723714 0.477239 0.503963
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd Eye1.png
+map_d Eye1.png
+
+newmtl 5_Outline1_1_16_16.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.473207 0.487686 0.542260
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd outline.tga
+map_d outline.tga
+
+newmtl 7_Shadow_1_16_16
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.505632 0.409947 0.449578
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd GKN_decal.tga
+map_d GKN_decal.tga

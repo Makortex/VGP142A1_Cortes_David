@@ -8,6 +8,16 @@ TagManager:
   - Hammer
   - Enemy
   - Acid
+  - Range
+  - Melee
+  - PlayerPunch
+  - PlayerBullet
+  - Key
+  - Medkit
+  - Coin
+  - Pumpkin
+  - Agro
+  - Portal
   layers:
   - Default
   - TransparentFX
